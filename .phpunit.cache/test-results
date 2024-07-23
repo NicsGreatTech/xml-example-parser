@@ -1,0 +1,1 @@
+{"version":1,"defects":{"NBorschke\\Tests\\Command\\ImportCatalogCommandTest::testExecute":5,"NBorschke\\Tests\\Repository\\CatalogRepositoryTest::testInsertOrUpdate":8},"times":{"NBorschke\\Tests\\Command\\ImportCatalogCommandTest::testExecute":0.046,"NBorschke\\Tests\\Repository\\CatalogRepositoryTest::testInsertOrUpdate":0.003}}
