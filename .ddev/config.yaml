@@ -13,6 +13,10 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 corepack_enable: false
+hooks:
+    post-start:
+        - exec: mysql -uroot -proot -hdb -e "CREATE DATABASE IF NOT EXISTS db_test; GRANT
+              ALL ON db_test.* TO 'db'@'%';"
 
 # Key features of DDEV's config.yaml:
 
