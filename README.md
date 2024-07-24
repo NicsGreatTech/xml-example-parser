@@ -14,7 +14,7 @@
 ## Clone ##
 Clone from remote repository into your local directory:
 ```
-git clone git@bitbucket.org:nborschke/frame-mall-website.git
+git clone git@github.com:NicsGreatTech/xml-example-parser.git
 ```
 
 ## DDEV start ##
