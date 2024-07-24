@@ -32,6 +32,12 @@ command:
 ddev composer install
 ```
 
+## Migrations ##
+To ensure needed database tables are all setup please execute migrations:
+```
+ddev exec bin/console doctrine:migrations:migrate
+```
+
 ## URLs ##
 To get a list of all URLs, ports, SQL credentials etc. type:
 ```
