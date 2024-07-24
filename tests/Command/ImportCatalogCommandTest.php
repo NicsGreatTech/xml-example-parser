@@ -34,7 +34,7 @@ class ImportCatalogCommandTest extends KernelTestCase
     public function testExecute()
     {
         $this->commandTester->execute([
-            'xmlFile' => 'files/tests/catalogtest.xml',
+            'xmlFile' => 'tests/Fixtures/catalogtest.xml',
         ]);
 
         $output = $this->commandTester->getDisplay();

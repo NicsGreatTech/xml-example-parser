@@ -43,7 +43,7 @@ class ImportCatalogCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $xmlFile = $input->getArgument('xmlFile') ? $input->getArgument('xmlFile') : null;
+        $xmlFile = $input->getArgument('xmlFile') ?: null;
 
         if (!$xmlFile || !file_exists($xmlFile)) {
             $io->error('XML file not found.');
