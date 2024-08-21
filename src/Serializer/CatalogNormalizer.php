@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NBorschke\Serializer;
 
 use NBorschke\Entity\Catalog;
+use NBorschke\Enum\YesNoToBooleanEnum;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -42,12 +43,12 @@ class CatalogNormalizer implements NormalizerInterface, DenormalizerInterface
             ->setLink($data['link'] ?? '')
             ->setImage($data['image'] ?? '')
             ->setBrand($data['Brand'] ?? '')
-            ->setRating($data['Rating'] ?? '')
+            ->setRating((int)$data['Rating'] ?? 0)
             ->setCaffeineType($data['CaffeineType'] ?? '')
             ->setCount((int)($data['Count'] ?? 0))
-            ->setFlavored((bool)($data['Flavored'] ?? false))
-            ->setSeasonal((bool)($data['Seasonal'] ?? false))
-            ->setInStock((bool)($data['Instock'] ?? false))
+            ->setFlavored(YesNoToBooleanEnum::fromString($data['Flavored']))
+            ->setSeasonal(YesNoToBooleanEnum::fromString($data['Seasonal']))
+            ->setInStock(YesNoToBooleanEnum::fromString($data['Instock']))
             ->setFacebook((bool)($data['Facebook'] ?? false))
             ->setKCup((bool)($data['IsKCup'] ?? false));
 

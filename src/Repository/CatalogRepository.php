@@ -20,32 +20,30 @@ class CatalogRepository extends ServiceEntityRepository
 
     public function insertOrUpdate(Catalog $catalog): void
     {
-        $connection = $this->getEntityManager()->getConnection();
+        $entityManager = $this->getEntityManager();
+        $existingCatalog = $this->findOneBy(['entityId' => $catalog->getEntityId()]);
 
-        $sql = '
-            INSERT INTO catalog (entity_id, category_name, sku, name, description, short_desc, price, link, image, brand, rating, caffeine_type, count, flavored, seasonal, in_stock, facebook, is_kcup)
-            VALUES (:entityId, :categoryName, :sku, :name, :description, :shortDesc, :price, :link, :image, :brand, :rating, :caffeineType, :count, :flavored, :seasonal, :inStock, :facebook, :isKCup)
-            ON DUPLICATE KEY UPDATE 
-                category_name = VALUES(category_name),
-                sku = VALUES(sku),
-                name = VALUES(name),
-                description = VALUES(description),
-                short_desc = VALUES(short_desc),
-                price = VALUES(price),
-                link = VALUES(link),
-                image = VALUES(image),
-                brand = VALUES(brand),
-                rating = VALUES(rating),
-                caffeine_type = VALUES(caffeine_type),
-                count = VALUES(count),
-                flavored = VALUES(flavored),
-                seasonal = VALUES(seasonal),
-                in_stock = VALUES(in_stock),
-                facebook = VALUES(facebook),
-                is_kcup = VALUES(is_kcup)
-        ';
-
-        $statement = $connection->prepare($sql);
-        $statement->executeQuery($catalog->toArray());
+        if ($existingCatalog) {
+            $existingCatalog
+                ->setCategoryName($catalog->getCategoryName())
+                ->setSku($catalog->getSku())
+                ->setName($catalog->getName())
+                ->setDescription($catalog->getDescription())
+                ->setShortDesc($catalog->getShortDesc())
+                ->setPrice($catalog->getPrice())
+                ->setLink($catalog->getLink())
+                ->setImage($catalog->getImage())
+                ->setBrand($catalog->getBrand())
+                ->setRating($catalog->getRating())
+                ->setCaffeineType($catalog->getCaffeineType())
+                ->setCount($catalog->getCount())
+                ->setFlavored($catalog->isFlavored())
+                ->setSeasonal($catalog->isSeasonal())
+                ->setInStock($catalog->isInStock())
+                ->setFacebook($catalog->isFacebook())
+                ->setKCup($catalog->isKCup());
+        } else {
+            $entityManager->persist($catalog);
+        }
     }
 }

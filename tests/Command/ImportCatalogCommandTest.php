@@ -14,10 +14,14 @@ use NBorschke\Command\ImportCatalogCommand;
 class ImportCatalogCommandTest extends KernelTestCase
 {
     private $entityManager;
+    private $commandTester;
 
     protected function setUp(): void
     {
         $this->bootKernel();
+        $this->entityManager = $this->getContainer()->get(EntityManagerInterface::class);
+        $this->entityManager->getConnection()->setNestTransactionsWithSavepoints(false);
+
         $this->runCommand('doctrine:database:drop', ['--force' => true]);
         $this->runCommand('doctrine:database:create');
         $this->runCommand('doctrine:migrations:migrate');
@@ -28,19 +32,18 @@ class ImportCatalogCommandTest extends KernelTestCase
         $command = $application->find('nborschke:import-xml');
 
         $this->commandTester = new CommandTester($command);
-        $this->entityManager = $this->getContainer()->get(EntityManagerInterface::class);
     }
 
     public function testExecute()
     {
         $this->commandTester->execute([
-            'xmlFile' => 'tests/Fixtures/catalogtest.xml',
+            'filePath' => 'tests/Fixtures/catalogtest.xml',
         ]);
 
         $output = $this->commandTester->getDisplay();
         $statusCode = $this->commandTester->getStatusCode();
 
-        $this->assertStringContainsString('Data imported successfully.', $output);
+        $this->assertStringContainsString('Data imported successfully', $output);
         $this->assertEquals(0, $statusCode);
 
         $catalogRepository = $this->entityManager->getRepository(Catalog::class);
@@ -51,10 +54,16 @@ class ImportCatalogCommandTest extends KernelTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+
+        $this->entityManager->getConnection()->setNestTransactionsWithSavepoints(false);
         $this->entityManager->createQuery('DELETE FROM NBorschke\Entity\Catalog')->execute();
+
         static::ensureKernelShutdown();
         $this->commandTester = null;
-        $this->entityManager->close();
+
+        if ($this->entityManager->isOpen()) {
+            $this->entityManager->close();
+        }
         $this->entityManager = null;
     }
 

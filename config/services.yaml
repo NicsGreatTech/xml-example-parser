@@ -19,12 +19,14 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
     NBorschke\Command\ImportCatalogCommand:
         arguments:
-            $catalogNormalizer: '@NBorschke\Serializer\CatalogNormalizer'
+            $catalogService: '@NBorschke\Service\CatalogImportService'
             $logger: '@logger'
-            $catalogRepository: '@NBorschke\Repository\CatalogRepository'
+            $validator: '@validator'
         tags: [ 'console.command' ]
+
     NBorschke\Serializer\CatalogNormalizer:
         arguments:
             $normalizer: '@serializer.normalizer.object'

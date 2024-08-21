@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NBorschke\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use NBorschke\Repository\CatalogRepository;
@@ -14,57 +15,76 @@ class Catalog
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank(message: "entityId should not be blank.")]
     private ?int $entityId = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type(type: "string")]
     private ?string $categoryName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Type(type: "string")]
     private ?string $sku = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: "string")]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Type(type: "string")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Type(type: "string")]
     private ?string $shortDesc = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: "float")]
     private ?float $price = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: "string")]
     private ?string $link = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: "string")]
     private ?string $image = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: "string")]
     private ?string $brand = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $rating = null;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\Type(type: "integer")]
+    #[Assert\Range(min: 0, max: 5)]
+    private ?int $rating = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: "string")]
     private ?string $caffeineType = null;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\Type(type: "integer")]
     private ?int $count = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: "boolean")]
     private ?bool $flavored = false;
 
     #[ORM\Column]
+    #[Assert\Type(type: "boolean")]
     private ?bool $seasonal = false;
 
     #[ORM\Column]
+    #[Assert\Type(type: "boolean")]
     private ?bool $inStock = false;
 
     #[ORM\Column]
+    #[Assert\Type(type: "boolean")]
     private ?bool $facebook = false;
 
     #[ORM\Column]
+    #[Assert\Type(type: "boolean")]
     private ?bool $isKCup = false;
 
     public function getEntityId(): ?int
@@ -158,7 +178,7 @@ class Catalog
 
     public function setLink(string $link): static
     {
-        $this->link = $link;
+        $this->link = trim($link);
 
         return $this;
     }
@@ -170,7 +190,7 @@ class Catalog
 
     public function setImage(string $image): static
     {
-        $this->image = $image;
+        $this->image = trim($image);
 
         return $this;
     }
@@ -187,12 +207,12 @@ class Catalog
         return $this;
     }
 
-    public function getRating(): ?string
+    public function getRating(): ?int
     {
         return $this->rating;
     }
 
-    public function setRating(string $rating): static
+    public function setRating(int $rating): static
     {
         $this->rating = $rating;
 

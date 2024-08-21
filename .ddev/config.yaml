@@ -15,6 +15,7 @@ web_environment: []
 corepack_enable: false
 hooks:
     post-start:
+        - exec: bin/console doctrine:migrations:migrate --no-interaction
         - exec: mysql -uroot -proot -hdb -e "CREATE DATABASE IF NOT EXISTS db_test; GRANT
               ALL ON db_test.* TO 'db'@'%';"
 
